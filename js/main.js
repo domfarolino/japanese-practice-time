@@ -59,9 +59,18 @@ sosEmoji.onclick = e => {
 
 const kPromptTypes = [
   'Time of day',
-  // 'Date',
+  'Date',
   // 'Duration',
   // 'Occurrences',
+];
+
+const kPromptColors = [
+  '#00AAFF',
+  '#7A374F',
+  // '#A8B900',
+  //'#D56E01',
+  // I like this color, but not sure we have enough prompt types to use it...
+  // '#00AF57',
 ];
 
 function formatAsMinute(minute) {
@@ -126,6 +135,71 @@ const kNumberTranslations = {
   12: 'じゅうに',
 };
 
+const kMonthTranslations = {
+  1: 'いちがつ',
+  2: 'にがつ',
+  3: 'さんがつ',
+  4: 'しがつ',
+  5: 'ごがつ',
+  6: 'ろくがつ',
+  7: 'しちがつ',
+  8: 'はちがつ',
+  9: 'くがつ',
+  10: 'じゅうがつ',
+  11: 'じゅういちがつ',
+  12: 'じゅうにがつ',
+};
+
+const kDaysPerMonth = {
+  1: 31,
+  2: 29,
+  3: 31,
+  4: 30,
+  5: 31,
+  6: 30,
+  7: 31,
+  8: 31,
+  9: 30,
+  10: 31,
+  11: 30,
+  12: 31,
+}
+
+// Populated from https://www.sljfaq.org/afaq/month-days.html.
+const kDayTranslations = {
+  1: 'ついたち',
+  2: 'ふつか',
+  3: 'みっか',
+  4: 'よっか',
+  5: 'いつか',
+  6: 'むいか',
+  7: 'なのか',
+  8: 'ようか',
+  9: 'ここのか',
+  10: 'とおか',
+  11: 'じゅういちにち',
+  12: 'じゅうににち',
+  13: 'じゅうさんにち',
+  14: 'じゅうよっか',
+  15: 'じゅうごにち',
+  16: 'じゅうろくにち',
+  17: 'じゅうしちにち',
+  18: 'じゅうはちにち',
+  19: 'じゅうくにち',
+  20: 'はつか',
+  21: 'にじゅういちにち',
+  22: 'にじゅうににち',
+  23: 'にじゅうさんにち',
+  24: 'にじゅうよっか',
+  25: 'にじゅうごにち',
+  26: 'にじゅうろくにち',
+  27: 'にじゅうしちにち',
+  28: 'にじゅうはちにち',
+  29: 'にじゅうくにち',
+  30: 'さんじゅうにち',
+  31: 'さんじゅういちにち',
+};
+
 function randomIndex(length) {
   return Math.floor((Math.random() * length));
 }
@@ -135,6 +209,7 @@ function generateNewPrompt() {
   const chosenPrompt = kPromptTypes[promptIndex];
   console.log('Chosen prompt:', chosenPrompt);
   promptTitle.innerText = chosenPrompt;
+  answerPanel.style.backgroundColor = kPromptColors[promptIndex];
 
   switch (chosenPrompt) {
     case 'Time of day':
@@ -211,8 +286,32 @@ function generateNewPrompt() {
         }
       };
       break;
+    case 'Date':
+      const month = randomIndex(12) + 1;
+      const day = randomIndex(kDaysPerMonth[month]) + 1;
+      window.prompt = {
+        toString() {
+          // https://stackoverflow.com/a/13627586.
+          function ordinalSuffix(i) {
+            let j = i % 10, k = i % 100;
+            if (j === 1 && k !== 11) return i + "st";
+            if (j === 2 && k !== 12) return i + "nd";
+            if (j === 3 && k !== 13) return i + "rd";
+            return i + "th";
+          }
+          // The `Date()` constructor takes a month *index* (not the number of
+          // the month), so we have to subtract from our *actual* month here).
+          const date = new Date(/*placeholder=*/2024, month - 1, day);
+          const monthString = date.toLocaleString('default', {month: 'long'});
+          return `${monthString} ${ordinalSuffix(day)}`;
+        },
+        correctAnswers() {
+          return [`${kMonthTranslations[month]}${kDayTranslations[day]}`];
+        }
+      };
+      break;
     default:
-      prompt = {};
+      window.prompt = {};
       console.info('Not implemented yet');
   }
 
@@ -267,12 +366,12 @@ ime.addEventListener('keyup', e => {
   // rid of it.
   ime.placeholder = '';
 
-  if (currentStreak.innerText < maxStreak.innerText) {
+  if (Number(currentStreak.innerText) < Number(maxStreak.innerText)) {
     window.fireConfettiOnNextMaxStreak = true;
   }
 
   currentStreak.innerText++;
-  if (currentStreak.innerText > maxStreak.innerText) {
+  if (Number(currentStreak.innerText) > Number(maxStreak.innerText)) {
     maxStreak.innerText++;
     // Only fire confetti if you surpassed a non-zero `maxStreak`.
     if (window.fireConfettiOnNextMaxStreak) {
