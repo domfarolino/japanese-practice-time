@@ -1,0 +1,56 @@
+<head>
+<title>Japanese Time Practice</title>
+<meta name=viewport content="width=device-width,minimum-scale=1,initial-scale=1">
+
+<link rel=stylesheet href=css/style.css>
+<link rel=preconnect href=https://fonts.googleapis.com>
+<link rel=preconnect href=https://fonts.gstatic.com crossorigin>
+<link rel=stylesheet href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=PT+Serif&display=swap">
+
+<script defer src=js/main.js></script>
+<script defer src=https://unpkg.com/wanakana@5.3.1/wanakana.min.js></script>
+<script defer src=https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js></script>
+</head>
+
+<body>
+  <div id=answerPanel>
+    <h2 style="text-align: center">Japanese Time &amp; Duration Practice</h2>
+    <div id=stats>
+      <div id=currentStreakContainer>
+        <p>Current Streak</p>
+        <p id=currentStreak>0</p>
+      </div>
+
+      <div id=maxStreakContainer>
+        <p>Max Streak</p>
+        <p id=maxStreak>0</p>
+      </div>
+    </div>
+
+    <h2 id=promptTitle></h2>
+    <h1 id=promptValue></h1>
+    <input type=text id="ime" placeholder="ろくじはん"></input><span id=sosEmoji style="display: none"> 🆘</span>
+  </div>
+
+  <details>
+    <summary>Click to learn about upcoming features</summary>
+    <br>
+    Soon this app will also quiz you on translations of the following
+    categories:
+
+    <ul>
+      <li><b>Dates</b> (e.g., "August 10th")</li>
+      <li><b>Durations</b> (doing something for e.g., "3 hours", "4 days", or "6 months")</li>
+      <li><b>Occurrences</b> (something that happens e.g., "4 times", "twice a week", "twice every two months")</li>
+    </ul>
+  </details>
+
+  <div id=debugPanel style="display: none; margin-top: 50px;">
+    <h3>🚧 <code>Debug Panel</code> 🚧</h3>
+    <p>Acceptable answers:</p>
+    <p id=debugAnswers></p>
+    <p onclick="generateNewPrompt()">Fast forward ⏩</p>
+    <p onclick="fireConfetti()">Fire confetti 🎆</p>
+  </div>
+  <p id="footer">© Copyright 2024 <a href=https://domfarolino.com>Dominic Farolino</a>. Built for free <a href=https://github.com/domfarolino/japanese-time-practice>on GitHub</a>.</p>
+</body>

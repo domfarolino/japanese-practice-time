@@ -1,0 +1,97 @@
+html, body {
+  font-family: 'Noto Sans', sans-serif;
+  padding: 0;
+  margin: 0;
+}
+
+#answerPanel {
+  width: 100%;
+  padding: 20px;
+  background: #CDDC39;
+  background: #1AB3FF;
+  background: #00AAFF;
+  text-align: center;
+  box-shadow: inset 0px 0px 10px rgba(0,0,0,0.9);
+  box-shadow: inset 0px 12px 10px -11px rgba(0,0,0,0.9);
+  box-sizing: border-box;
+
+  input#ime {
+    font-size: 30px;
+    text-align: center;
+    outline: none;
+    border: 0;
+    font-weight: bold;
+    padding: 10px;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  input::placeholder {
+    color: lightgrey;
+  }
+}
+
+#stats {
+  font-size: 20px;
+  color: white;
+  margin: 0 auto;
+  max-width: 600px;
+  /*https://www.tutorialspoint.com/how-to-right-align-flex-item*/
+  display: flex;
+  justify-content: space-between;
+
+  #currentStreak, #maxStreak {
+    font-weight: bold;
+  }
+}
+
+details {
+  margin: 20px auto;
+  max-width: 600px;
+
+  summary {
+    text-align: center;
+  }
+}
+
+#debugPanel {
+  margin: 0 auto;
+  max-width: 600px;
+  border: 2px solid red;
+  text-align: center;
+  font-size: 20px;
+  width 90%;
+}
+
+h1 {
+  font-size: 50px;
+}
+
+h1,h2 {
+  color: white;
+}
+
+.wrong {
+  animation: .25s alternate wrong;
+}
+
+#sosEmoji {
+  font-size: 30px;
+}
+
+@keyframes wrong {
+ 0% { transform: translateX(0) }
+ 25% { transform: translateX(12px) }
+ 50% { transform: translateX(-12px) }
+ 75% { transform: translateX(12px) }
+ 100% { transform: translateX(0) }
+}
+
+#footer {
+  position: absolute;
+  bottom: 0;
+  color: #A99E9E;
+  text-align: center;
+  width: 100%;
+  font-size: 14px;
+}
