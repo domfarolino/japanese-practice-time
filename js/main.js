@@ -60,17 +60,16 @@ sosEmoji.onclick = e => {
 const kPromptTypes = [
   'Time of day',
   'Date',
-  // 'Duration',
-  // 'Occurrences',
+  'Duration',
+  // 'Frequency',
 ];
 
 const kPromptColors = [
   '#00AAFF',
   '#7A374F',
-  // '#A8B900',
-  //'#D56E01',
-  // I like this color, but not sure we have enough prompt types to use it...
+  '#D56E01',
   // '#00AF57',
+  // '#A8B900',
 ];
 
 function formatAsMinute(minute) {
@@ -150,6 +149,23 @@ const kMonthTranslations = {
   12: 'じゅうにがつ',
 };
 
+// See
+// https://www.tofugu.com/japanese/japanese-counter-tsuki-gatsu-getsu/#how-to-use-the-japanese-counter---1.
+const kMonthDurationTranslations = {
+  1: 'いっ',
+  2: 'に',
+  3: 'さん',
+  4: 'よん',
+  5: 'ご',
+  6: 'ろっか',
+  7: 'なな',
+  8: 'はち',
+  9: 'きゅう',
+  10: 'じゅっ',
+  11: 'じゅういっ',
+  12: 'じゅうに',
+};
+
 const kDaysPerMonth = {
   1: 31,
   2: 29,
@@ -212,7 +228,7 @@ function generateNewPrompt() {
   answerPanel.style.backgroundColor = kPromptColors[promptIndex];
 
   switch (chosenPrompt) {
-    case 'Time of day':
+    case 'Time of day': {
       // Every so often, we'll generate a completely random "atypical" minute.
       const shouldGenerateAtypicalMinute = randomIndex(8) === 2;
       window.prompt = {
@@ -286,7 +302,8 @@ function generateNewPrompt() {
         }
       };
       break;
-    case 'Date':
+    }
+    case 'Date': {
       const month = randomIndex(12) + 1;
       const day = randomIndex(kDaysPerMonth[month]) + 1;
       window.prompt = {
@@ -310,6 +327,72 @@ function generateNewPrompt() {
         }
       };
       break;
+    }
+    case 'Duration' : {
+      // We have a few options for generation a random duration:
+      //   1. Number of minutes
+      //   2. Number of hours
+      //   3. Number of days
+      //   4. Number of weeks
+      //   5. Number of months
+      //   6. Number of years
+
+      // Note that for every quantity of time that has a standard range R (i.e.,
+      // 60 for minutes, 12 for months), we set the effective range size to be
+      // R-1.
+      //
+      // That way `randomIndex()` will generate values in the range [0-(R-2)].
+      // Then we exclude all 0 values, by unconditionally adding 1, which gives
+      // us values in the final range [1-(R-1)], which is what we want. That is,
+      // we don't want 0, and we don't want the max quantity, because i.e., 60
+      // for minutes isn't useful, it's just 1 hour. 59 is the last useful
+      // minute number by this app's definition.
+      const kDurationOptions = [
+        // ['minutes', 59],
+        // ['hours', 23],
+        // Days don't have a standard valid quantity; I'm choosing 14
+        // arbitrarily.
+        // ['days', 14],
+        // ['weeks', 51],
+        ['months', 11],
+        // ['years', 30] // Same with years.
+      ];
+
+      const durationIndex = randomIndex(kDurationOptions.length);
+      const durationType = kDurationOptions[durationIndex][0];
+      const durationRange = kDurationOptions[durationIndex][1];
+      console.assert(durationRange > 0);
+
+      // This will be [1-12] for months, [1-60] for minutes, [1-24] for hours, etc.
+      // To ensure that we never produce `0`, always add `1`.
+      const boundedDurationOfType = randomIndex(durationRange) + 1;
+
+      window.prompt = {
+        toString() {
+          return `${boundedDurationOfType} ${durationType}`;
+        },
+        correctAnswers() {
+          let correctAnswer = null;
+          switch (durationType) {
+            case 'minutes':
+            case 'hours':
+            case 'days':
+            case 'weeks':
+              correctAnswer = 'Not implemented';
+              break;
+            case 'months': {
+              correctAnswer = `${kMonthDurationTranslations[boundedDurationOfType]}かげつ`;
+              break;
+            }
+            case 'years':
+              correctAnswer = 'Not implemented';
+          }
+
+          return [correctAnswer];
+        }
+      };
+      break;
+    }
     default:
       window.prompt = {};
       console.info('Not implemented yet');
