@@ -67,8 +67,8 @@ const kPromptTypes = [
 const kPromptColors = [
   '#00AAFF',
   '#7A374F',
-  '#00AF57',
-  // '#D56E01',
+  '#D56E01',
+  // '#00AF57',
   // '#A8B900',
 ];
 
@@ -221,7 +221,7 @@ function randomIndex(length) {
 }
 
 function generateNewPrompt() {
-  const promptIndex = /*randomIndex(kPromptTypes.length)*/ 2;
+  const promptIndex = randomIndex(kPromptTypes.length);
   const chosenPrompt = kPromptTypes[promptIndex];
   console.log('Chosen prompt:', chosenPrompt);
   promptTitle.innerText = chosenPrompt;
