@@ -151,13 +151,13 @@ const kMonthTranslations = {
 
 // See
 // https://www.tofugu.com/japanese/japanese-counter-tsuki-gatsu-getsu/#how-to-use-the-japanese-counter---1.
-const kMonthDurationTranslations = {
+const kMonthDurationTranslationPrefixes = {
   1: 'いっ',
   2: 'に',
   3: 'さん',
   4: 'よん',
   5: 'ご',
-  6: 'ろっか',
+  6: 'ろっ',
   7: 'なな',
   8: 'はち',
   9: 'きゅう',
@@ -381,7 +381,7 @@ function generateNewPrompt() {
               correctAnswer = 'Not implemented';
               break;
             case 'months': {
-              correctAnswer = `${kMonthDurationTranslations[boundedDurationOfType]}かげつ`;
+              correctAnswer = `${kMonthDurationTranslationPrefixes[boundedDurationOfType]}かげつ`;
               break;
             }
             case 'years':
@@ -418,6 +418,16 @@ ime.addEventListener('keyup', e => {
 
   // Check answer.
   const answer = ime.value;
+
+  // Some answers are wrong but do not reset the current streak, because they
+  // are an immaterial mistake. For an answer to reset the streak, it must be:
+  //   1. Non-empty.
+  const wrongAnswerCountsAsReset = (answer !== '') &&
+  //   2. Valid kana.
+      wanakana.isKana(answer);
+  // When wrong (always), any answer that fails these conditions is handled in a
+  // more relaxed way.
+
   if (!window.prompt.correctAnswers().includes(answer)) {
     console.warn('Incorrect');
 
@@ -426,11 +436,13 @@ ime.addEventListener('keyup', e => {
     void ime.offsetWidth;
     ime.classList.add('wrong');
 
-    currentStreakContainer.classList.remove('wrong');
-    void currentStreakContainer.offsetWidth;
-    currentStreakContainer.classList.add('wrong');
+    if (wrongAnswerCountsAsReset) {
+      currentStreakContainer.classList.remove('wrong');
+      void currentStreakContainer.offsetWidth;
+      currentStreakContainer.classList.add('wrong');
 
-    currentStreak.innerText = 0;
+      currentStreak.innerText = 0;
+    }
 
     sosEmoji.style.display = '';
     return;
