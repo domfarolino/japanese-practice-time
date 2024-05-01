@@ -426,9 +426,9 @@ ime.addEventListener('keyup', e => {
     void ime.offsetWidth;
     ime.classList.add('wrong');
 
-    currentStreak.classList.remove('wrong');
-    void currentStreak.offsetWidth;
-    currentStreak.classList.add('wrong');
+    currentStreakContainer.classList.remove('wrong');
+    void currentStreakContainer.offsetWidth;
+    currentStreakContainer.classList.add('wrong');
 
     currentStreak.innerText = 0;
 
