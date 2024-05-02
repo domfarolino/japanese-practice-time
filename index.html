@@ -31,13 +31,24 @@
     <h2 style="text-align: center">Japanese Time &amp; Duration Practice</h2>
     <div id=stats>
       <div id=currentStreakContainer>
-        <p>Current Streak</p>
-        <p id=currentStreak>0</p>
+        <span>
+          <p>Current Streak</p>
+          <p id=currentStreak>0</p>
+        </span>
+      </div>
+
+      <div id=countdown>
+        <span>
+          <span id=timerEmoji>▶️</span>
+          <div style="margin-top: 10px;" id=timerValue></div>
+        </span>
       </div>
 
       <div id=maxStreakContainer>
-        <p>Max Streak</p>
-        <p id=maxStreak>0</p>
+        <span>
+          <p>Max Streak</p>
+          <p id=maxStreak>0</p>
+        </span>
       </div>
     </div>
 
@@ -67,3 +78,6 @@
   </div>
   <p id="footer">© Copyright 2024 <a href=https://domfarolino.com>Dominic Farolino</a>. Built for free <a href=https://github.com/domfarolino/japanese-practice-time>on GitHub</a>.</p>
 </body>
+
+<script defer src="https://albert-gonzalez.github.io/easytimer.js/dist/easytimer.min.js"></script>
+<script defer src=js/timer.js></script>

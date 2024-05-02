@@ -32,18 +32,42 @@ html, body {
   }
 }
 
+/*
+  See https://stackoverflow.com/a/32546033 for all of the flexbox magic
+  here.
+*/
 #stats {
   font-size: 20px;
   color: white;
   margin: 0 auto;
   max-width: 600px;
-  /*https://www.tutorialspoint.com/how-to-right-align-flex-item*/
   display: flex;
-  justify-content: space-between;
 
   #currentStreak, #maxStreak {
     font-weight: bold;
   }
+}
+#stats div {
+  flex: 1;
+
+  /*
+    Make each stats div itself a flex container, so the span inside of it can be
+    moved around inside said container easily.
+  */
+  display: flex;
+  justify-content: center;
+}
+#stats>div:first-child > span {
+  margin-right: auto;
+}
+#stats>div:last-child > span {
+  margin-left: auto;
+}
+/* END flexbox magic*/
+
+#countdown {
+  cursor: pointer;
+  align-items: center;
 }
 
 details {
