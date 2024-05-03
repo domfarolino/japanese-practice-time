@@ -323,7 +323,11 @@ function generateNewPrompt() {
           return `${monthString} ${ordinalSuffix(day)}`;
         },
         correctAnswers() {
-          return [`${kMonthTranslations[month]}${kDayTranslations[day]}`];
+          const returnAnswers = [`${kMonthTranslations[month]}${kDayTranslations[day]}`];
+          if (day === 30) {
+            returnAnswers.push(`${kMonthTranslations[month]}みそか`);
+          }
+          return returnAnswers;
         }
       };
       break;
