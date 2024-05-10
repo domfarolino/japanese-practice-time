@@ -222,6 +222,7 @@ function randomIndex(length) {
   return Math.floor((Math.random() * length));
 }
 
+// Start the app with a new prompt for the user.
 generateNewPrompt();
 
 window.onload = e => {
@@ -299,3 +300,6 @@ ime.addEventListener('keyup', e => {
   ime.value = '';
   generateNewPrompt();
 });
+
+fastForwardTarget.onclick = generateNewPrompt;
+fireConfettiTarget.onclick = fireConfetti;
